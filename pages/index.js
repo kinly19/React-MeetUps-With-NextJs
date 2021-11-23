@@ -1,3 +1,4 @@
+import { MongoClient } from 'mongodb';
 import MeetupList from '../components/meetups/MeetupList';
 
 // ============================== Notes ==============================
@@ -41,14 +42,32 @@ const HomePage = (props) => {
 
 // this page will wait until data has fetched from API, pass data via props to the page component 
 export async function getStaticProps () {
+  
   //fetch data from an API
+  const client = await MongoClient.connect(
+    "mongodb+srv://adminHQ:meetupslive@meetups.abzya.mongodb.net/meetups?retryWrites=true&w=majority"
+  );
+
+  const db = client.db();
+
+  const meetupsCollection = db.collection('meetups');
+
+  const meetups = await meetupsCollection.find().toArray();
+
+  client.close();
+
   return {
     // will be passed to the page component as props
-    props: { 
-      meetups: DUMMY_MEETUPS
+    props: {
+      meetups: meetups.map((meetup) => ({
+        title: meetup.title,
+        address: meetup.address,
+        image: meetup.image,
+        id: meetup._id.toString(),
+      })),
     },
     //numbers in sec, when we want page regeneration to occur if there are request for this page
-    revalidate: 10 
+    revalidate: 1,
   };
 };
 
