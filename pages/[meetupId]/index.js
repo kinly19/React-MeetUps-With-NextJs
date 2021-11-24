@@ -1,3 +1,5 @@
+import { Fragment } from 'react';
+import Head from 'next/head';
 import { MongoClient, ObjectId } from 'mongodb';
 import MeetupDetails from '../../components/meetups/MeetupInfo';
 
@@ -7,17 +9,27 @@ import MeetupDetails from '../../components/meetups/MeetupInfo';
 //  it needs to define a list of paths that have to be rendered to HTML at build time...
 // 'paths' key is required - determines which paths will be pre-rendered
 // 'fallback' key is required - must contain a boolean fallback key
+
+// Head - built-in component for appending elements to the head of the page
 // ===================================================================
 
-//Change Dummy data below with fetched data from a backend source 
 const MeetupDetail = (props) => {
   return (
-    <MeetupDetails 
-      image={props.meetupData.image}
-      title={props.meetupData.title}
-      address={props.meetupData.address}
-      description={props.meetupData.description}
-    />
+    <Fragment>
+      <Head>
+        <title>{props.meetupData.title}</title>
+        <meta
+          description='selected meetups details page'
+          content={props.meetupData.description}
+        />
+      </Head>
+      <MeetupDetails
+        image={props.meetupData.image}
+        title={props.meetupData.title}
+        address={props.meetupData.address}
+        description={props.meetupData.description}
+      />
+    </Fragment>
   );
 };
 
@@ -64,6 +76,6 @@ export async function getStaticProps (context) {
       },
     },
   };
-}
+};
 
 export default MeetupDetail;
