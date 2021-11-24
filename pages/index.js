@@ -1,3 +1,5 @@
+import Head from 'next/head';
+import { Fragment } from 'react';
 import { MongoClient } from 'mongodb';
 import MeetupList from '../components/meetups/MeetupList';
 
@@ -37,7 +39,18 @@ const DUMMY_MEETUPS = [
 ];
 
 const HomePage = (props) => {
-  return <MeetupList meetups={props.meetups} />
+  return (
+    <Fragment>
+      <Head>
+        <title>React Meetups</title>
+        <meta
+          name="description"
+          content="Browse a huge list of highly active React meetups"
+        ></meta>
+      </Head>
+      <MeetupList meetups={props.meetups} />
+    </Fragment>
+  );
 };
 
 // this page will wait until data has fetched from API, pass data via props to the page component 
